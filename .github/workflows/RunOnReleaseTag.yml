@@ -5,7 +5,21 @@ on:
     types: [published]
 
 jobs:
-  my-job:
+  ReleaseCandidateTag:
+    if: ${{ contains(github.ref_name, 'RC') }}
+    name: my-job
+    runs-on: ubuntu-latest
+    steps:
+      # ...
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+
+      - run: echo "I Only Run On RC Releases"
+      # run any `bun` or `bunx` command
+      - run: bun install
+      - run: bun index.ts
+
+  ReleaseTag:
     if: ${{ !contains(github.ref_name, 'RC') }}
     name: my-job
     runs-on: ubuntu-latest
