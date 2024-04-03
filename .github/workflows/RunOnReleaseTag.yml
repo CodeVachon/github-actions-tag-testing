@@ -12,10 +12,9 @@ jobs:
     steps:
       # ...
       - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v1
 
       - run: echo "I Only Run On RC Releases"
-      - uses: ./.github/workflows/actions/ReusableAction.yml
+      - uses: ./.github/workflows/ReusableAction.yml
 
   ReleaseTag:
     if: ${{ !contains(github.ref_name, 'RC') }}
@@ -24,7 +23,6 @@ jobs:
     steps:
       # ...
       - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v1
 
       - run: echo "I Only Run On Releases"
-      - uses: ./.github/workflows/actions/ReusableAction.yml
+      - uses: ./.github/workflows/ReusableAction.yml
