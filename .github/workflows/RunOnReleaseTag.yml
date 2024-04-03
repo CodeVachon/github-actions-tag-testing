@@ -7,22 +7,41 @@ on:
 jobs:
   ReleaseCandidateTag:
     if: ${{ contains(github.ref_name, 'RC') }}
-    name: my-job
+    name: build release candidate
     runs-on: ubuntu-latest
     steps:
-      # ...
       - uses: actions/checkout@v4
-
       - run: echo "I Only Run On RC Releases"
-      - uses: ./.github/workflows/ReuseableAction.yml
+
+  ReuseableActionForReleaceCandidateTag:
+    name: deploy release candidate
+    needs: [ReleaseCandidateTag]
+    strategy:
+      matrix:
+        host:
+          - a
+    uses: ./.github/workflows/ReuseableAction.yml
+    with:
+      host: ${{ matrix.host }}
 
   ReleaseTag:
     if: ${{ !contains(github.ref_name, 'RC') }}
-    name: my-job
+    name: build tag
     runs-on: ubuntu-latest
     steps:
       # ...
       - uses: actions/checkout@v4
-
       - run: echo "I Only Run On Releases"
-      - uses: ./.github/workflows/ReuseableAction.yml
+
+  ReuseableActionForTag:
+    name: deploy tag
+    needs: [ReleaseTag]
+    strategy:
+      matrix:
+        host:
+          - a
+          - b
+          - c
+    uses: ./.github/workflows/ReuseableAction.yml
+    with:
+      host: ${{ matrix.host }}
