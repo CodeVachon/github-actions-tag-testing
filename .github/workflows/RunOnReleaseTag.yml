@@ -15,9 +15,7 @@ jobs:
       - uses: oven-sh/setup-bun@v1
 
       - run: echo "I Only Run On RC Releases"
-      # run any `bun` or `bunx` command
-      - run: bun install
-      - run: bun index.ts
+      - uses: ./.github/workflows/actions/ReusableAction.yml
 
   ReleaseTag:
     if: ${{ !contains(github.ref_name, 'RC') }}
@@ -29,6 +27,4 @@ jobs:
       - uses: oven-sh/setup-bun@v1
 
       - run: echo "I Only Run On Releases"
-      # run any `bun` or `bunx` command
-      - run: bun install
-      - run: bun index.ts
+      - uses: ./.github/workflows/actions/ReusableAction.yml
