@@ -9,7 +9,7 @@ on:
 
 jobs:
   Run:
-    name: deployment
+    name: deploy ${{ github.ref_name }} to ${{ inputs.host }}
     runs-on: ubuntu-latest
     steps:
       # ...
@@ -18,4 +18,4 @@ jobs:
 
       # run any `bun` or `bunx` command
       - run: bun install
-      - run: bun index.ts
+      - run: bun index.ts -t ${{ github.ref_name }}
