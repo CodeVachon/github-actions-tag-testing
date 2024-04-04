@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v4
       - run: echo "I Only Run On RC Releases"
       - run: echo time >> text.txt
-      - uses: mr-smithers-excellent/docker-build-push@v6.3
+      - uses: codevachon/docker-build-push@3f3db0d
         name: Build & Push App Docker Image
         with:
           image: app
