@@ -11,6 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: echo "I Only Run On RC Releases"
+      - run: echo time >> text.txt
       - uses: mr-smithers-excellent/docker-build-push@v6.2
         name: Build & Push App Docker Image
         with:
