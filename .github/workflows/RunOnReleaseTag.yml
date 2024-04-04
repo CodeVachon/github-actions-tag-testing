@@ -5,17 +5,27 @@ on:
     types: [published]
 
 jobs:
-  ReleaseCandidateTag:
-    if: ${{ contains(github.ref_name, 'RC') }}
+  Build:
     name: build release candidate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - run: echo "I Only Run On RC Releases"
+      - uses: mr-smithers-excellent/docker-build-push@v6.2
+        name: Build & Push App Docker Image
+        with:
+          image: app
+          registry: ghcr.io
+          dockerfile: Dockerfile
+          addLatest: true
+          enableBuildKit: true
+          username: ${{ secrets.GHCR_USERNAME }}
+          password: ${{ secrets.GHCR_TOKEN }}
 
   ReuseableActionForReleaceCandidateTag:
+    if: ${{ contains(github.ref_name, 'RC') }}
     name: deploy release candidate
-    needs: [ReleaseCandidateTag]
+    needs: [Build]
     strategy:
       matrix:
         host:
@@ -24,18 +34,10 @@ jobs:
     with:
       host: ${{ matrix.host }}
 
-  ReleaseTag:
-    if: ${{ !contains(github.ref_name, 'RC') }}
-    name: build tag
-    runs-on: ubuntu-latest
-    steps:
-      # ...
-      - uses: actions/checkout@v4
-      - run: echo "I Only Run On Releases"
-
   ReuseableActionForTag:
+    if: ${{ !contains(github.ref_name, 'RC') }}
     name: deploy tag
-    needs: [ReleaseTag]
+    needs: [Build]
     strategy:
       matrix:
         host:
