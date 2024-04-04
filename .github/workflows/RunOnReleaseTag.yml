@@ -18,7 +18,6 @@ jobs:
           image: app
           registry: ghcr.io
           dockerfile: Dockerfile
-          tags: ${{ github.ref_name }}
           addLatest: ${{ !contains(github.ref_name, 'RC') }}
           username: ${{ secrets.GHCR_USERNAME }}
           password: ${{ secrets.GHCR_TOKEN }}
